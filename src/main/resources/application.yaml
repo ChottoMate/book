@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: book
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/book
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  flyway:
+    baseline-version: 0
+    enabled: true
+    baseline-on-migrate: true
+
+server:
+  port: 8081
