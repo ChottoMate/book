@@ -18,6 +18,12 @@ class BookService(private val bookRepository: BookRepository) {
         return recordToBook(results)
     }
 
+    public fun getBooks(title: String, authorName: String): List<Book> {
+        val results = bookRepository.findByBookInfo(title, authorName)
+
+        return recordToBook(results)
+    }
+
     private fun recordToBook(bookRecord: Result<Record3<Int, String, String>>): List<Book> {
         var currentBookId = -1
         var currentBookTitle = ""
