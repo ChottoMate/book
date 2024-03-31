@@ -56,8 +56,8 @@ tasks.named('test') {
 
 flyway {
 	url = "jdbc:mysql://127.0.0.1:3306/book"
-	user = "root"
-	password = "root"
+	user = System.getenv("DB_USER")
+	password = System.getenv("DB_PASSWORD")
 }
 
 jooq {
