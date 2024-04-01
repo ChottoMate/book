@@ -18,8 +18,14 @@ class BookService(private val bookRepository: BookRepository) {
         return recordToBook(results)
     }
 
-    public fun getBooks(title: String, authorName: String): List<Book> {
-        val results = bookRepository.findByBookInfo(title, authorName)
+    public fun getBooksByTitle(title: String): List<Book> {
+        val results = bookRepository.findByBookTitle(title)
+
+        return recordToBook(results)
+    }
+
+    public fun getBooksByAuthor(authorId: Int): List<Book> {
+        val results = bookRepository.findByAuthor(authorId)
 
         return recordToBook(results)
     }

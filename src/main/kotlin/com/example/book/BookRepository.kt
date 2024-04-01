@@ -18,13 +18,23 @@ class BookRepository(private val dslContext: DSLContext) {
         return result
     }
 
-    public fun findByBookInfo(title: String, authorName: String): Result<Record3<Int, String, String>> {
+    public fun findByBookTitle(title: String): Result<Record3<Int, String, String>> {
         val result = dslContext.select(Book.BOOK.BOOKS.BOOK_ID, Book.BOOK.BOOKS.TITLE, Book.BOOK.AUTHORS.NAME)
                 .from(Book.BOOK.BOOKS)
                 .join(Book.BOOK.BOOKS_AUTHORS).on(Book.BOOK.BOOKS.BOOK_ID.eq(Book.BOOK.BOOKS_AUTHORS.BOOK_ID))
                 .join(Book.BOOK.AUTHORS).on(Book.BOOK.AUTHORS.AUTHOR_ID.eq(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID))
                 .where(Book.BOOK.BOOKS.TITLE.like("%${title}%"))
-                .and(Book.BOOK.AUTHORS.NAME.like("%${authorName}%"))
+                .fetch()
+
+        return result
+    }
+
+    public fun findByAuthor(authorId: Int): Result<Record3<Int, String, String>> {
+        val result = dslContext.select(Book.BOOK.BOOKS.BOOK_ID, Book.BOOK.BOOKS.TITLE, Book.BOOK.AUTHORS.NAME)
+                .from(Book.BOOK.BOOKS)
+                .join(Book.BOOK.BOOKS_AUTHORS).on(Book.BOOK.BOOKS.BOOK_ID.eq(Book.BOOK.BOOKS_AUTHORS.BOOK_ID))
+                .join(Book.BOOK.AUTHORS).on(Book.BOOK.AUTHORS.AUTHOR_ID.eq(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID))
+                .where(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID.eq(authorId))
                 .fetch()
 
         return result
