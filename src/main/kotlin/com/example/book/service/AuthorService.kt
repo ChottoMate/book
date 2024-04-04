@@ -9,4 +9,8 @@ class AuthorService(private val repository: AuthorRepository) {
     public fun findAll(): List<Authors> {
         return repository.findAll()
     }
+
+    public fun findByName(name: String): List<Authors> {
+        return repository.findByName(name)
+    }
 }
