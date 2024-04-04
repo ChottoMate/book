@@ -59,4 +59,25 @@ class BookRepository(private val dslContext: DSLContext) {
                     .execute()
         }
     }
+
+    public fun updateBookTitle(bookId: Int, title: String) {
+        dslContext.update(Book.BOOK.BOOKS)
+                .set(Book.BOOK.BOOKS.TITLE, title)
+                .where(Book.BOOK.BOOKS.BOOK_ID.eq(bookId))
+                .execute()
+    }
+
+    public fun addAuthor(bookId: Int, authorId: Int) {
+        dslContext.insertInto(Book.BOOK.BOOKS_AUTHORS)
+                .set(Book.BOOK.BOOKS_AUTHORS.BOOK_ID, bookId)
+                .set(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID, authorId)
+                .execute()
+    }
+
+    public fun  removeAuthor(bookId: Int, authorId: Int) {
+        dslContext.deleteFrom(Book.BOOK.BOOKS_AUTHORS)
+                .where(Book.BOOK.BOOKS_AUTHORS.BOOK_ID.eq(bookId))
+                .and(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID.eq(authorId))
+                .execute()
+    }
 }

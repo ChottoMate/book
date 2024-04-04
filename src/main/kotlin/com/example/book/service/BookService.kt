@@ -37,6 +37,13 @@ class BookService(private val bookRepository: BookRepository) {
         bookRepository.insertBookAuthor(bookId, authorIds)
     }
 
+    @Transactional
+    public fun updateBook(bookId: Int, title: String?, authorIdsAdded: List<Int>?, authorIdsRemoved: List<Int>?) {
+        title?.let { bookRepository.updateBookTitle(bookId, it) }
+        authorIdsAdded?.forEach { bookRepository.addAuthor(bookId, it) }
+        authorIdsRemoved?.forEach { bookRepository.removeAuthor(bookId, it) }
+    }
+
     private fun recordToBook(bookRecord: Result<Record3<Int, String, String>>): List<Book> {
         var currentBookId = -1
         var currentBookTitle = ""
