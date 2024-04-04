@@ -17,4 +17,8 @@ class AuthorService(private val repository: AuthorRepository) {
     public fun insertAuthor(name: String) {
         return repository.insertAuthor(name)
     }
+
+    public fun updateAuthor(name: String) {
+        return repository.update(name)
+    }
 }

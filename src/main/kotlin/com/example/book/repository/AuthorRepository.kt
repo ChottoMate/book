@@ -32,4 +32,10 @@ class AuthorRepository(private val dslContext: DSLContext) {
                 .set(Book.BOOK.AUTHORS.NAME, name)
                 .execute()
     }
+
+    public fun update(name: String) {
+        dslContext.update(Book.BOOK.AUTHORS)
+                .set(Book.BOOK.AUTHORS.NAME, name)
+                .execute()
+    }
 }
