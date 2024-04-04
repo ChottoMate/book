@@ -13,4 +13,8 @@ class AuthorService(private val repository: AuthorRepository) {
     public fun findByName(name: String): List<Authors> {
         return repository.findByName(name)
     }
+
+    public fun insertAuthor(name: String) {
+        return repository.insertAuthor(name)
+    }
 }

@@ -26,4 +26,10 @@ class AuthorRepository(private val dslContext: DSLContext) {
 
         return result
     }
+
+    public fun insertAuthor(name: String) {
+        dslContext.insertInto(Book.BOOK.AUTHORS)
+                .set(Book.BOOK.AUTHORS.NAME, name)
+                .execute()
+    }
 }
