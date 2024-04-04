@@ -1,13 +1,10 @@
 package com.example.book.service
 
-import com.example.book.BookRepository
+import com.example.book.repository.BookRepository
 import com.example.book.model.Book
-import org.jooq.DSLContext
-import org.jooq.Record
 import org.jooq.Record3
 import org.jooq.Result
 import org.jooq.generated.book.Book.BOOK
-import org.jooq.generated.book.tables.records.BooksRecord
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

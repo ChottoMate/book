@@ -14,32 +14,32 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/book")
 class BookController(private val bookService: BookService) {
-    @GetMapping("/allBooks")
+    @GetMapping("/all")
     public fun getAllBooks(): List<Book> {
         val result = bookService.getAllBooks()
         return result
     }
 
-    @GetMapping("/books")
+    @GetMapping("/title")
     public fun getBooks(@RequestParam title: String?): List<Book> {
         val result = bookService.getBooksByTitle(title ?: "")
         return result
     }
 
-    @GetMapping("/books/{authorId}")
+    @GetMapping("/{authorId}")
     public fun getBooks(@PathVariable authorId: Int): List<Book> {
         val result = bookService.getBooksByAuthor(authorId)
         return result
     }
 
-    @PostMapping("/book")
+    @PostMapping("/")
     public fun insertBook(@RequestBody request: BookInsertRequest) {
         bookService.insertBook(request.title, request.authorIds)
     }
 
-    @PutMapping("/book/{bookId}")
+    @PutMapping("/{bookId}")
     public fun updateBook(@PathVariable bookId: Int, @RequestBody request: BookUpdateRequest) {
         bookService.updateBook(bookId, request.title, request.authorIdsAdded, request.authorIdsRemoved)
     }

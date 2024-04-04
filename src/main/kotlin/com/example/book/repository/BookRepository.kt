@@ -1,4 +1,4 @@
-package com.example.book
+package com.example.book.repository
 
 import org.jooq.DSLContext
 import org.jooq.Record3
