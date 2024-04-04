@@ -9,6 +9,7 @@ import org.jooq.Result
 import org.jooq.generated.book.Book.BOOK
 import org.jooq.generated.book.tables.records.BooksRecord
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class BookService(private val bookRepository: BookRepository) {
@@ -28,6 +29,12 @@ class BookService(private val bookRepository: BookRepository) {
         val results = bookRepository.findByAuthor(authorId)
 
         return recordToBook(results)
+    }
+
+    @Transactional
+    public fun insertBook(title: String, authorIds: List<Int>) {
+        val bookId = bookRepository.insertBook(title)
+        bookRepository.insertBookAuthor(bookId, authorIds)
     }
 
     private fun recordToBook(bookRecord: Result<Record3<Int, String, String>>): List<Book> {

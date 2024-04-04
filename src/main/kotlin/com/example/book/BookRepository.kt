@@ -39,4 +39,24 @@ class BookRepository(private val dslContext: DSLContext) {
 
         return result
     }
+
+    public fun insertBook(title: String): Int {
+        val bookId = dslContext.insertInto(Book.BOOK.BOOKS)
+                .set(Book.BOOK.BOOKS.TITLE, title)
+                .returningResult(Book.BOOK.BOOKS.BOOK_ID)
+                .fetchOne()
+                ?.getValue(Book.BOOK.BOOKS.BOOK_ID)
+                ?: throw IllegalStateException("Failed to insert book")
+
+        return bookId
+    }
+
+    public fun insertBookAuthor(bookId: Int, authorIds: List<Int>) {
+        authorIds.forEach{ it ->
+            dslContext.insertInto(Book.BOOK.BOOKS_AUTHORS)
+                    .set(Book.BOOK.BOOKS_AUTHORS.BOOK_ID, bookId)
+                    .set(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID, it)
+                    .execute()
+        }
+    }
 }
