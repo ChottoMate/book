@@ -28,7 +28,7 @@ class BookController(private val bookService: BookService) {
         return result
     }
 
-    @GetMapping("/{authorId}")
+    @GetMapping("/author/{authorId}")
     public fun getBooks(@PathVariable authorId: Int): List<Book> {
         val result = bookService.getBooksByAuthor(authorId)
         return result
