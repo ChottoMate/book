@@ -1,13 +1,10 @@
 package com.example.book.controller
 
-import com.example.book.model.Book
-import com.example.book.request.BookInsertRequest
+import com.example.book.model.BookInfo
 import com.example.book.service.BookService
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mock
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -18,12 +15,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import java.util.Arrays
 
 @SpringBootTest
 @ExtendWith(SpringExtension::class)
 @AutoConfigureMockMvc
-class BookControllerTest() {
+class BookInfoControllerTest() {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -33,10 +29,10 @@ class BookControllerTest() {
 
     @Test
     fun getAllBooks_success() {
-        val books = mutableListOf(Book(1, "book1", mutableListOf("Tanaka", "Suzuki")))
+        val bookInfos = mutableListOf(BookInfo(1, "book1", mutableListOf("Tanaka", "Suzuki")))
         val mapper = ObjectMapper()
-        val expectedResponse = mapper.writeValueAsString(books)
-        Mockito.`when`(bookService.getAllBooks()).thenReturn(books)
+        val expectedResponse = mapper.writeValueAsString(bookInfos)
+        Mockito.`when`(bookService.getAllBooks()).thenReturn(bookInfos)
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/book/all"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -46,10 +42,10 @@ class BookControllerTest() {
 
     @Test
     fun getBooksByTitle_success() {
-        val books = mutableListOf(Book(1, "book1", mutableListOf("Tanaka", "Suzuki")))
+        val bookInfos = mutableListOf(BookInfo(1, "book1", mutableListOf("Tanaka", "Suzuki")))
         val mapper = ObjectMapper()
-        val expectedResponse = mapper.writeValueAsString(books)
-        Mockito.`when`(bookService.getBooksByTitle("book1")).thenReturn(books)
+        val expectedResponse = mapper.writeValueAsString(bookInfos)
+        Mockito.`when`(bookService.getBooksByTitle("book1")).thenReturn(bookInfos)
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/book/title").param("title", "book1"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -59,10 +55,10 @@ class BookControllerTest() {
 
     @Test
     fun getBooksByAuthorId_success() {
-        val books = mutableListOf(Book(1, "book1", mutableListOf("Tanaka", "Suzuki")))
+        val bookInfos = mutableListOf(BookInfo(1, "book1", mutableListOf("Tanaka", "Suzuki")))
         val mapper = ObjectMapper()
-        val expectedResponse = mapper.writeValueAsString(books)
-        Mockito.`when`(bookService.getBooksByAuthor(1)).thenReturn(books)
+        val expectedResponse = mapper.writeValueAsString(bookInfos)
+        Mockito.`when`(bookService.getBooksByAuthor(1)).thenReturn(bookInfos)
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/book/author/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))

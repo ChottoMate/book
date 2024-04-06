@@ -1,7 +1,7 @@
 package com.example.book.service
 
 import com.example.book.repository.BookRepository
-import com.example.book.model.Book
+import com.example.book.model.BookInfo
 import org.jooq.Record3
 import org.jooq.Result
 import org.jooq.generated.book.Book.BOOK
@@ -10,22 +10,22 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class BookService(private val bookRepository: BookRepository) {
-    public fun getAllBooks(): List<Book> {
+    public fun getAllBooks(): List<BookInfo> {
         val results = bookRepository.findAll()
 
-        return recordToBook(results)
+        return results
     }
 
-    public fun getBooksByTitle(title: String): List<Book> {
+    public fun getBooksByTitle(title: String): List<BookInfo> {
         val results = bookRepository.findByBookTitle(title)
 
-        return recordToBook(results)
+        return results
     }
 
-    public fun getBooksByAuthor(authorId: Int): List<Book> {
+    public fun getBooksByAuthor(authorId: Int): List<BookInfo> {
         val results = bookRepository.findByAuthor(authorId)
 
-        return recordToBook(results)
+        return results
     }
 
     @Transactional
@@ -41,30 +41,4 @@ class BookService(private val bookRepository: BookRepository) {
         authorIdsRemoved?.forEach { bookRepository.removeAuthor(bookId, it) }
     }
 
-    private fun recordToBook(bookRecord: Result<Record3<Int, String, String>>): List<Book> {
-        var currentBookId = -1
-        var currentBookTitle = ""
-        val result = mutableListOf<Book>()
-        val authors = mutableListOf<String>()
-        for (record in bookRecord) {
-            val bookId = record.getValue(BOOK.BOOKS.BOOK_ID)
-            val title = record.getValue(BOOK.BOOKS.TITLE)
-            val authorName = record.getValue(BOOK.AUTHORS.NAME)
-            if (currentBookId != bookId) {
-                if (currentBookId != -1) {
-                    val book = Book(currentBookId, currentBookTitle, authors)
-                    result.add(book)
-                }
-                currentBookId = bookId
-                currentBookTitle = title
-                authors.clear()
-            }
-            authors.add(authorName)
-        }
-        if (currentBookId != -1) {
-            result.add(Book(currentBookId, currentBookTitle, authors))
-        }
-
-        return result
-    }
 }

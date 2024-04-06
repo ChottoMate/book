@@ -1,6 +1,6 @@
 package com.example.book.controller
 
-import com.example.book.model.Book
+import com.example.book.model.BookInfo
 import com.example.book.request.BookInsertRequest
 import com.example.book.request.BookUpdateRequest
 import com.example.book.service.BookService
@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/book")
 class BookController(private val bookService: BookService) {
     @GetMapping("/all")
-    public fun getAllBooks(): List<Book> {
+    public fun getAllBooks(): List<BookInfo> {
         val result = bookService.getAllBooks()
         return result
     }
 
     @GetMapping("/title")
-    public fun getBooks(@RequestParam title: String?): List<Book> {
+    public fun getBooks(@RequestParam title: String?): List<BookInfo> {
         val result = bookService.getBooksByTitle(title ?: "")
         return result
     }
 
     @GetMapping("/author/{authorId}")
-    public fun getBooks(@PathVariable authorId: Int): List<Book> {
+    public fun getBooks(@PathVariable authorId: Int): List<BookInfo> {
         val result = bookService.getBooksByAuthor(authorId)
         return result
     }
