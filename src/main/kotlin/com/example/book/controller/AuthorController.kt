@@ -1,5 +1,6 @@
 package com.example.book.controller
 
+import com.example.book.model.AuthorInfo
 import com.example.book.request.AuthorInsertRequest
 import com.example.book.request.AuthorUpdateRequest
 import com.example.book.service.AuthorService
@@ -16,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/author")
 class AuthorController(private val service: AuthorService) {
     @GetMapping("/all")
-    fun getAllAuthors(): List<Authors> {
+    fun getAllAuthors(): List<AuthorInfo> {
         return service.findAll()
     }
 
     @GetMapping("/{name}")
-    fun getAuthorsByName(@PathVariable name: String): List<Authors> {
+    fun getAuthorsByName(@PathVariable name: String): List<AuthorInfo> {
         return service.findByName(name)
     }
 
@@ -30,8 +31,8 @@ class AuthorController(private val service: AuthorService) {
         service.insertAuthor(request.name)
     }
 
-    @PutMapping("/")
-    fun updateAuthor(@RequestBody request: AuthorUpdateRequest) {
-        service.updateAuthor(request.name)
+    @PutMapping("/{authorId}")
+    fun updateAuthor(@PathVariable authorId: Int, @RequestBody request: AuthorUpdateRequest) {
+        service.updateAuthor(authorId, request.name)
     }
 }

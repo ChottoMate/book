@@ -1,5 +1,6 @@
 package com.example.book.repository
 
+import com.example.book.model.AuthorInfo
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.Records
@@ -10,19 +11,19 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class AuthorRepository(private val dslContext: DSLContext) {
-    public fun findAll(): List<Authors> {
+    public fun findAll(): List<AuthorInfo> {
         val result = dslContext.select()
                 .from(Book.BOOK.AUTHORS)
-                .fetchInto(Authors::class.java)
+                .fetchInto(AuthorInfo::class.java)
 
         return result
     }
 
-    public fun findByName(name: String): List<Authors> {
+    public fun findByName(name: String): List<AuthorInfo> {
         val result = dslContext.select()
                 .from(Book.BOOK.AUTHORS)
                 .where(Book.BOOK.AUTHORS.NAME.like("%name%"))
-                .fetchInto(Authors::class.java)
+                .fetchInto(AuthorInfo::class.java)
 
         return result
     }
@@ -33,9 +34,10 @@ class AuthorRepository(private val dslContext: DSLContext) {
                 .execute()
     }
 
-    public fun update(name: String) {
+    public fun update(authorId: Int, name: String) {
         dslContext.update(Book.BOOK.AUTHORS)
                 .set(Book.BOOK.AUTHORS.NAME, name)
+                .where(Book.BOOK.AUTHORS.AUTHOR_ID.eq(authorId))
                 .execute()
     }
 }
