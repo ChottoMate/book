@@ -91,7 +91,8 @@ class BookRepository(private val dslContext: DSLContext) {
         var currentBookTitle = ""
         val result = mutableListOf<BookInfo>()
         var authors = mutableListOf<String>()
-        for (record in bookRecord) {
+        val sortedBookRecord = bookRecord.sortedBy { it.getValue(Book.BOOK.BOOKS.BOOK_ID) }
+        for (record in sortedBookRecord) {
             val bookId = record.getValue(Book.BOOK.BOOKS.BOOK_ID)
             val title = record.getValue(Book.BOOK.BOOKS.TITLE)
             val authorName = record.getValue(Book.BOOK.AUTHORS.NAME)
