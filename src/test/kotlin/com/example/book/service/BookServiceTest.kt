@@ -2,11 +2,6 @@ package com.example.book.service
 
 import com.example.book.model.BookInfo
 import com.example.book.repository.BookRepository
-import org.jooq.Record
-import org.jooq.Record3
-import org.jooq.Result
-import org.jooq.generated.book.Book
-import org.jooq.tools.jdbc.MockResult
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -15,13 +10,9 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 
 @ExtendWith(MockitoExtension::class)
-class BookInfoServiceTest {
+class BookServiceTest {
     @Mock
     private lateinit var bookRepository: BookRepository
 
