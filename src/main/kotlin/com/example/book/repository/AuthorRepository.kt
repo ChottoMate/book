@@ -22,7 +22,7 @@ class AuthorRepository(private val dslContext: DSLContext) {
     public fun findByName(name: String): List<AuthorInfo> {
         val result = dslContext.select()
                 .from(Book.BOOK.AUTHORS)
-                .where(Book.BOOK.AUTHORS.NAME.like("%name%"))
+                .where(Book.BOOK.AUTHORS.NAME.like("%${name}%"))
                 .fetchInto(AuthorInfo::class.java)
 
         return result
