@@ -1,8 +1,6 @@
 package com.example.book.repository
 
 import com.example.book.model.BookInfo
-import org.jooq.generated.book.tables.Authors
-import org.jooq.generated.book.tables.Books
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 @Transactional
-class BookInfoRepositoryTest {
+class BookRepositoryTest {
     @Autowired
     private lateinit var bookRepository: BookRepository
 
