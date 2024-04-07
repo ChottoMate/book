@@ -29,10 +29,11 @@ class BookInfoControllerTest() {
 
     @Test
     fun getAllBooks_success() {
-        val bookInfos = mutableListOf(BookInfo(1, "book1", mutableListOf("Tanaka", "Suzuki")))
+        val bookInfos = listOf(BookInfo(1, "book1", listOf("Tanaka", "Suzuki")))
         val mapper = ObjectMapper()
         val expectedResponse = mapper.writeValueAsString(bookInfos)
         Mockito.`when`(bookService.getAllBooks()).thenReturn(bookInfos)
+
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/book/all"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -42,10 +43,11 @@ class BookInfoControllerTest() {
 
     @Test
     fun getBooksByTitle_success() {
-        val bookInfos = mutableListOf(BookInfo(1, "book1", mutableListOf("Tanaka", "Suzuki")))
+        val bookInfos = listOf(BookInfo(1, "book1", listOf("Tanaka", "Suzuki")))
         val mapper = ObjectMapper()
         val expectedResponse = mapper.writeValueAsString(bookInfos)
         Mockito.`when`(bookService.getBooksByTitle("book1")).thenReturn(bookInfos)
+
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/book/title").param("title", "book1"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -55,10 +57,11 @@ class BookInfoControllerTest() {
 
     @Test
     fun getBooksByAuthorId_success() {
-        val bookInfos = mutableListOf(BookInfo(1, "book1", mutableListOf("Tanaka", "Suzuki")))
+        val bookInfos = listOf(BookInfo(1, "book1", listOf("Tanaka", "Suzuki")))
         val mapper = ObjectMapper()
         val expectedResponse = mapper.writeValueAsString(bookInfos)
         Mockito.`when`(bookService.getBooksByAuthor(1)).thenReturn(bookInfos)
+
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/book/author/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -75,6 +78,7 @@ class BookInfoControllerTest() {
             }
         """.trimIndent()
         Mockito.doNothing().`when`(bookService).insertBook("book1", listOf(1, 2))
+
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/book/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request))
@@ -92,6 +96,7 @@ class BookInfoControllerTest() {
             }
         """.trimIndent()
         Mockito.doNothing().`when`(bookService).updateBook(1, "book1", listOf(1, 2), listOf(3, 4))
+
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/book/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request))

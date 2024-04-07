@@ -29,10 +29,12 @@ class BookInfoServiceTest {
     private lateinit var bookService: BookService
 
     @Test
-    public fun getAllBooks_success() {
+    fun getAllBooks_success() {
         val booksMock = listOf(BookInfo(1, "book1", listOf("tanaka")))
         Mockito.`when`(bookRepository.findAll()).thenReturn(booksMock)
+
         val books = bookService.getAllBooks()
+
         books.forEach {
             Assertions.assertEquals(1, it.bookId)
             Assertions.assertEquals("book1", it.title)
@@ -42,10 +44,12 @@ class BookInfoServiceTest {
     }
 
     @Test
-    public fun getBooksByTitle_success() {
+    fun getBooksByTitle_success() {
         val booksMock = listOf(BookInfo(1, "book1", listOf("tanaka")))
         Mockito.`when`(bookRepository.findByBookTitle("book1")).thenReturn(booksMock)
+
         val books = bookService.getBooksByTitle("book1")
+
         books.forEach {
             Assertions.assertEquals(1, it.bookId)
             Assertions.assertEquals("book1", it.title)
@@ -55,10 +59,12 @@ class BookInfoServiceTest {
     }
 
     @Test
-    public fun getBooksByAuthor_success() {
+    fun getBooksByAuthor_success() {
         val booksMock = listOf(BookInfo(1, "book1", listOf("tanaka")))
         Mockito.`when`(bookRepository.findByAuthor(1)).thenReturn(booksMock)
+
         val books = bookService.getBooksByAuthor(1)
+
         books.forEach {
             Assertions.assertEquals(1, it.bookId)
             Assertions.assertEquals("book1", it.title)
@@ -68,22 +74,26 @@ class BookInfoServiceTest {
     }
 
     @Test
-    public fun insertBook_success() {
+    fun insertBook_success() {
         Mockito.`when`(bookRepository.insertBook("book1")).thenReturn(1)
         Mockito.doNothing().`when`(bookRepository).insertBookAuthor(1, listOf(1, 2))
+
         bookService.insertBook("book1", listOf(1, 2))
+
         Mockito.verify(bookRepository, Mockito.times(1)).insertBook("book1")
         Mockito.verify(bookRepository, Mockito.times(1)).insertBookAuthor(1, listOf(1, 2))
     }
 
     @Test
-    public fun updateBook_success() {
+    fun updateBook_success() {
         Mockito.doNothing().`when`(bookRepository).updateBookTitle(1, "book2")
         Mockito.doNothing().`when`(bookRepository).addAuthor(1, 3)
         Mockito.doNothing().`when`(bookRepository).addAuthor(1, 4)
         Mockito.doNothing().`when`(bookRepository).removeAuthor(1, 1)
         Mockito.doNothing().`when`(bookRepository).removeAuthor(1, 2)
+
         bookService.updateBook(1, "book2", listOf(3, 4), listOf(1, 2))
+
         Mockito.verify(bookRepository, Mockito.times(1)).updateBookTitle(1, "book2")
         Mockito.verify(bookRepository, Mockito.times(1)).addAuthor(1, 3)
         Mockito.verify(bookRepository, Mockito.times(1)).addAuthor(1, 4)
@@ -92,8 +102,9 @@ class BookInfoServiceTest {
     }
 
     @Test
-    public fun updateBook_doNothing_noUpdatedArgs() {
+    fun updateBook_doNothing_noUpdatedArgs() {
         bookService.updateBook(1, null, emptyList(), emptyList())
+
         Mockito.verify(bookRepository, Mockito.times(0)).updateBookTitle(ArgumentMatchers.anyInt(), ArgumentMatchers.anyString())
         Mockito.verify(bookRepository, Mockito.times(0)).addAuthor(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt())
         Mockito.verify(bookRepository, Mockito.times(0)).removeAuthor(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt())

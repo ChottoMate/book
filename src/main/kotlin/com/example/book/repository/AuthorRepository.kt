@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class AuthorRepository(private val dslContext: DSLContext) {
-    public fun findAll(): List<AuthorInfo> {
+    fun findAll(): List<AuthorInfo> {
         val result = dslContext.select()
                 .from(Book.BOOK.AUTHORS)
                 .fetchInto(AuthorInfo::class.java)
@@ -19,7 +19,7 @@ class AuthorRepository(private val dslContext: DSLContext) {
         return result
     }
 
-    public fun findByName(name: String): List<AuthorInfo> {
+    fun findByName(name: String): List<AuthorInfo> {
         val result = dslContext.select()
                 .from(Book.BOOK.AUTHORS)
                 .where(Book.BOOK.AUTHORS.NAME.like("%${name}%"))
@@ -28,13 +28,13 @@ class AuthorRepository(private val dslContext: DSLContext) {
         return result
     }
 
-    public fun insertAuthor(name: String) {
+    fun insertAuthor(name: String) {
         dslContext.insertInto(Book.BOOK.AUTHORS)
                 .set(Book.BOOK.AUTHORS.NAME, name)
                 .execute()
     }
 
-    public fun update(authorId: Int, name: String) {
+    fun update(authorId: Int, name: String) {
         dslContext.update(Book.BOOK.AUTHORS)
                 .set(Book.BOOK.AUTHORS.NAME, name)
                 .where(Book.BOOK.AUTHORS.AUTHOR_ID.eq(authorId))

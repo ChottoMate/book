@@ -32,6 +32,7 @@ class AuthorControllerTest {
         val mapper = ObjectMapper()
         val expectedResponse = mapper.writeValueAsString(authors)
         Mockito.`when`(authorService.findAll()).thenReturn(authors)
+
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/author/all"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -45,6 +46,7 @@ class AuthorControllerTest {
         val mapper = ObjectMapper()
         val expectedResponse = mapper.writeValueAsString(authors)
         Mockito.`when`(authorService.findByName("author1")).thenReturn(authors)
+
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/author/author1"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -60,6 +62,7 @@ class AuthorControllerTest {
             }
         """.trimIndent()
         Mockito.doNothing().`when`(authorService).insertAuthor("author1")
+
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/author/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request))
@@ -75,6 +78,7 @@ class AuthorControllerTest {
             }
         """.trimIndent()
         Mockito.doNothing().`when`(authorService).updateAuthor(1, "author2")
+
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/author/1").content(request).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk)
         Mockito.verify(authorService, Mockito.times(1)).updateAuthor(1, "author2")

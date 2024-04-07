@@ -24,7 +24,9 @@ class AuthorServiceTest {
     fun getAllBooks_success() {
         val authorsMock = listOf(AuthorInfo(1, "author1"))
         Mockito.`when`(authorRepository.findAll()).thenReturn(authorsMock)
+
         val authors = authorService.findAll()
+
         authors.forEach {
             Assertions.assertEquals(1, it.authorId)
             Assertions.assertEquals("author1", it.name)
@@ -36,7 +38,9 @@ class AuthorServiceTest {
     fun findByName_success() {
         val authorsMock = listOf(AuthorInfo(1, "author1"))
         Mockito.`when`(authorRepository.findByName("author1")).thenReturn(authorsMock)
+
         val authors = authorService.findByName("author1")
+
         authors.forEach {
             Assertions.assertEquals(1, it.authorId)
             Assertions.assertEquals("author1", it.name)
@@ -47,14 +51,18 @@ class AuthorServiceTest {
     @Test
     fun insertAuthor_success() {
         Mockito.doNothing().`when`(authorRepository).insertAuthor("author1")
+
         authorService.insertAuthor("author1")
+
         Mockito.verify(authorRepository, Mockito.times(1)).insertAuthor("author1")
     }
 
     @Test
     fun updateAuthor_success() {
         Mockito.doNothing().`when`(authorRepository).update(1, "author2")
+
         authorService.updateAuthor( 1,"author2")
+
         Mockito.verify(authorRepository, Mockito.times(1)).update(1, "author2")
     }
 }

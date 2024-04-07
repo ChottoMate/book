@@ -17,30 +17,33 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/book")
 class BookController(private val bookService: BookService) {
     @GetMapping("/all")
-    public fun getAllBooks(): List<BookInfo> {
+    fun getAllBooks(): List<BookInfo> {
         val result = bookService.getAllBooks()
+
         return result
     }
 
     @GetMapping("/title")
-    public fun getBooks(@RequestParam title: String?): List<BookInfo> {
+    fun getBooks(@RequestParam title: String?): List<BookInfo> {
         val result = bookService.getBooksByTitle(title ?: "")
+
         return result
     }
 
     @GetMapping("/author/{authorId}")
-    public fun getBooks(@PathVariable authorId: Int): List<BookInfo> {
+    fun getBooks(@PathVariable authorId: Int): List<BookInfo> {
         val result = bookService.getBooksByAuthor(authorId)
+
         return result
     }
 
     @PostMapping("/")
-    public fun insertBook(@RequestBody request: BookInsertRequest) {
+    fun insertBook(@RequestBody request: BookInsertRequest) {
         bookService.insertBook(request.title, request.authorIds)
     }
 
     @PutMapping("/{bookId}")
-    public fun updateBook(@PathVariable bookId: Int, @RequestBody request: BookUpdateRequest) {
+    fun updateBook(@PathVariable bookId: Int, @RequestBody request: BookUpdateRequest) {
         bookService.updateBook(bookId, request.title, request.authorIdsAdded, request.authorIdsRemoved)
     }
 

@@ -7,19 +7,19 @@ import org.springframework.stereotype.Service
 
 @Service
 class AuthorService(private val repository: AuthorRepository) {
-    public fun findAll(): List<AuthorInfo> {
+    fun findAll(): List<AuthorInfo> {
         return repository.findAll()
     }
 
-    public fun findByName(name: String): List<AuthorInfo> {
+    fun findByName(name: String): List<AuthorInfo> {
         return repository.findByName(name)
     }
 
-    public fun insertAuthor(name: String) {
+    fun insertAuthor(name: String) {
         return repository.insertAuthor(name)
     }
 
-    public fun updateAuthor(authorId: Int, name: String) {
+    fun updateAuthor(authorId: Int, name: String) {
         return repository.update(authorId, name)
     }
 }

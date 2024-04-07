@@ -24,6 +24,7 @@ class AuthorRepositoryTest {
     @Sql("/book.sql")
     fun findAll_success() {
         val result = authorRepository.findAll()
+
         val expected = listOf(
                 AuthorInfo(1, "author1_1"),
                 AuthorInfo(2, "author1_2"),
@@ -42,6 +43,7 @@ class AuthorRepositoryTest {
     @Sql("/book.sql")
     fun findByName_success() {
         val result = authorRepository.findByName("author2")
+
         val expected = listOf(
                 AuthorInfo(4, "author2_1"),
                 AuthorInfo(5, "author2_2"),
@@ -53,6 +55,7 @@ class AuthorRepositoryTest {
     @Test
     fun insertAuthor_success() {
         authorRepository.insertAuthor("author1_4")
+
         val authorName = jdbcTemplate.queryForObject<String>("SELECT name FROM `book`.`authors`")
         Assertions.assertEquals(authorName, "author1_4")
     }
@@ -61,6 +64,7 @@ class AuthorRepositoryTest {
     @Sql("/book.sql")
     fun update_success() {
         authorRepository.update(1, "author1_4")
+
         val authorName = jdbcTemplate.queryForObject<String>("SELECT name FROM `book`.`authors` WHERE `author_id` = 1")
         Assertions.assertEquals(authorName, "author1_4")
     }
