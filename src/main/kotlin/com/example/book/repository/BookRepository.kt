@@ -1,16 +1,19 @@
 package com.example.book.repository
 
+import com.example.book.model.AuthorInfo
 import com.example.book.model.BookInfo
 import org.jooq.DSLContext
 import org.jooq.Record3
+import org.jooq.Record4
 import org.jooq.Result
 import org.jooq.generated.book.Book
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Repository
 
 @Repository
 class BookRepository(private val dslContext: DSLContext) {
     fun findAll(): List<BookInfo> {
-        val result = dslContext.select(Book.BOOK.BOOKS.BOOK_ID, Book.BOOK.BOOKS.TITLE, Book.BOOK.AUTHORS.NAME)
+        val result = dslContext.select(Book.BOOK.BOOKS.BOOK_ID, Book.BOOK.BOOKS.TITLE, Book.BOOK.AUTHORS.NAME, Book.BOOK.AUTHORS.AUTHOR_ID)
                 .from(Book.BOOK.BOOKS)
                 .join(Book.BOOK.BOOKS_AUTHORS).on(Book.BOOK.BOOKS.BOOK_ID.eq(Book.BOOK.BOOKS_AUTHORS.BOOK_ID))
                 .join(Book.BOOK.AUTHORS).on(Book.BOOK.AUTHORS.AUTHOR_ID.eq(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID))
@@ -20,7 +23,7 @@ class BookRepository(private val dslContext: DSLContext) {
     }
 
     fun findByBookTitle(title: String): List<BookInfo> {
-        val result = dslContext.select(Book.BOOK.BOOKS.BOOK_ID, Book.BOOK.BOOKS.TITLE, Book.BOOK.AUTHORS.NAME)
+        val result = dslContext.select(Book.BOOK.BOOKS.BOOK_ID, Book.BOOK.BOOKS.TITLE, Book.BOOK.AUTHORS.NAME, Book.BOOK.AUTHORS.AUTHOR_ID)
                 .from(Book.BOOK.BOOKS)
                 .join(Book.BOOK.BOOKS_AUTHORS).on(Book.BOOK.BOOKS.BOOK_ID.eq(Book.BOOK.BOOKS_AUTHORS.BOOK_ID))
                 .join(Book.BOOK.AUTHORS).on(Book.BOOK.AUTHORS.AUTHOR_ID.eq(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID))
@@ -35,7 +38,7 @@ class BookRepository(private val dslContext: DSLContext) {
                 .from(Book.BOOK.BOOKS)
                 .join(Book.BOOK.BOOKS_AUTHORS).on(Book.BOOK.BOOKS.BOOK_ID.eq(Book.BOOK.BOOKS_AUTHORS.BOOK_ID))
                 .where(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID.eq(authorId))
-        val result = dslContext.select(Book.BOOK.BOOKS.BOOK_ID, Book.BOOK.BOOKS.TITLE, Book.BOOK.AUTHORS.NAME)
+        val result = dslContext.select(Book.BOOK.BOOKS.BOOK_ID, Book.BOOK.BOOKS.TITLE, Book.BOOK.AUTHORS.NAME, Book.BOOK.AUTHORS.AUTHOR_ID)
                 .from(Book.BOOK.BOOKS)
                 .join(Book.BOOK.BOOKS_AUTHORS).on(Book.BOOK.BOOKS.BOOK_ID.eq(Book.BOOK.BOOKS_AUTHORS.BOOK_ID))
                 .join(Book.BOOK.AUTHORS).on(Book.BOOK.AUTHORS.AUTHOR_ID.eq(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID))
@@ -73,29 +76,41 @@ class BookRepository(private val dslContext: DSLContext) {
     }
 
     fun addAuthor(bookId: Int, authorId: Int) {
-        dslContext.insertInto(Book.BOOK.BOOKS_AUTHORS)
-                .set(Book.BOOK.BOOKS_AUTHORS.BOOK_ID, bookId)
-                .set(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID, authorId)
-                .execute()
+        try {
+            dslContext.insertInto(Book.BOOK.BOOKS_AUTHORS)
+                    .set(Book.BOOK.BOOKS_AUTHORS.BOOK_ID, bookId)
+                    .set(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID, authorId)
+                    .execute()
+        } catch (e: DataIntegrityViolationException) {
+            println("some error")
+        }
+
     }
 
     fun  removeAuthor(bookId: Int, authorId: Int) {
-        dslContext.deleteFrom(Book.BOOK.BOOKS_AUTHORS)
-                .where(Book.BOOK.BOOKS_AUTHORS.BOOK_ID.eq(bookId))
-                .and(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID.eq(authorId))
-                .execute()
+        println("aaaaaaaaaaaaaaaaaaaaaaa")
+        try {
+            dslContext.deleteFrom(Book.BOOK.BOOKS_AUTHORS)
+                    .where(Book.BOOK.BOOKS_AUTHORS.BOOK_ID.eq(bookId))
+                    .and(Book.BOOK.BOOKS_AUTHORS.AUTHOR_ID.eq(authorId))
+                    .execute()
+        } catch (e: DataIntegrityViolationException) {
+            println("some error")
+        }
+
     }
 
-    private fun recordToBook(bookRecord: Result<Record3<Int, String, String>>): List<BookInfo> {
+    private fun recordToBook(bookRecord: Result<Record4<Int, String, String, Int>>): List<BookInfo> {
         var currentBookId = -1
         var currentBookTitle = ""
         val result = mutableListOf<BookInfo>()
-        var authors = mutableListOf<String>()
+        var authors = mutableListOf<AuthorInfo>()
         val sortedBookRecord = bookRecord.sortedBy { it.getValue(Book.BOOK.BOOKS.BOOK_ID) }
         for (record in sortedBookRecord) {
             val bookId = record.getValue(Book.BOOK.BOOKS.BOOK_ID)
             val title = record.getValue(Book.BOOK.BOOKS.TITLE)
             val authorName = record.getValue(Book.BOOK.AUTHORS.NAME)
+            val authorId = record.getValue(Book.BOOK.AUTHORS.AUTHOR_ID)
             if (currentBookId != bookId) {
                 if (currentBookId != -1) {
                     val bookInfo = BookInfo(currentBookId, currentBookTitle, authors)
@@ -105,7 +120,7 @@ class BookRepository(private val dslContext: DSLContext) {
                 currentBookTitle = title
                 authors = arrayListOf()
             }
-            authors.add(authorName)
+            authors.add(AuthorInfo(authorId, authorName))
         }
         if (currentBookId != -1) {
             result.add(BookInfo(currentBookId, currentBookTitle, authors))

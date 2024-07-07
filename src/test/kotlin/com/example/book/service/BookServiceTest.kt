@@ -1,5 +1,6 @@
 package com.example.book.service
 
+import com.example.book.model.AuthorInfo
 import com.example.book.model.BookInfo
 import com.example.book.repository.BookRepository
 import org.junit.jupiter.api.Assertions
@@ -10,6 +11,8 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.aot.hint.TypeReference.listOf
+import java.util.Collections.emptyList
 
 @ExtendWith(MockitoExtension::class)
 class BookServiceTest {
@@ -21,7 +24,7 @@ class BookServiceTest {
 
     @Test
     fun getAllBooks_success() {
-        val booksMock = listOf(BookInfo(1, "book1", listOf("tanaka")))
+        val booksMock = listOf(BookInfo(1, "book1", listOf(AuthorInfo(1, "tanaka"))))
         Mockito.`when`(bookRepository.findAll()).thenReturn(booksMock)
 
         val books = bookService.getAllBooks()
@@ -29,14 +32,14 @@ class BookServiceTest {
         books.forEach {
             Assertions.assertEquals(1, it.bookId)
             Assertions.assertEquals("book1", it.title)
-            Assertions.assertTrue(it.authorName.containsAll(listOf("tanaka")))
+            Assertions.assertEquals("tanaka", it.authors[0].name)
         }
         Mockito.verify(bookRepository, Mockito.times(1)).findAll()
     }
 
     @Test
     fun getBooksByTitle_success() {
-        val booksMock = listOf(BookInfo(1, "book1", listOf("tanaka")))
+        val booksMock = listOf(BookInfo(1, "book1", listOf(AuthorInfo(1, "tanaka"))))
         Mockito.`when`(bookRepository.findByBookTitle("book1")).thenReturn(booksMock)
 
         val books = bookService.getBooksByTitle("book1")
@@ -44,14 +47,14 @@ class BookServiceTest {
         books.forEach {
             Assertions.assertEquals(1, it.bookId)
             Assertions.assertEquals("book1", it.title)
-            Assertions.assertTrue(it.authorName.containsAll(listOf("tanaka")))
+            Assertions.assertEquals("tanaka", it.authors[0].name)
         }
         Mockito.verify(bookRepository, Mockito.times(1)).findByBookTitle("book1")
     }
 
     @Test
     fun getBooksByAuthor_success() {
-        val booksMock = listOf(BookInfo(1, "book1", listOf("tanaka")))
+        val booksMock = listOf(BookInfo(1, "book1", listOf(AuthorInfo(1, "tanaka"))))
         Mockito.`when`(bookRepository.findByAuthor(1)).thenReturn(booksMock)
 
         val books = bookService.getBooksByAuthor(1)
@@ -59,7 +62,7 @@ class BookServiceTest {
         books.forEach {
             Assertions.assertEquals(1, it.bookId)
             Assertions.assertEquals("book1", it.title)
-            Assertions.assertTrue(it.authorName.containsAll(listOf("tanaka")))
+            Assertions.assertEquals("tanaka", it.authors[0].name)
         }
         Mockito.verify(bookRepository, Mockito.times(1)).findByAuthor(1)
     }

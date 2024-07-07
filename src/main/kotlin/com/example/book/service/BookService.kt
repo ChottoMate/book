@@ -5,6 +5,7 @@ import com.example.book.model.BookInfo
 import org.jooq.Record3
 import org.jooq.Result
 import org.jooq.generated.book.Book.BOOK
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -29,13 +30,20 @@ class BookService(private val bookRepository: BookRepository) {
     }
 
     @Transactional
-    fun insertBook(title: String, authorIds: List<Int>) {
-        val bookId = bookRepository.insertBook(title)
-        bookRepository.insertBookAuthor(bookId, authorIds)
+    public fun insertBook(title: String, authorIds: List<Int>) {
+        try {
+            val bookId = bookRepository.insertBook(title)
+            bookRepository.insertBookAuthor(bookId, authorIds)
+        } catch (e: DataIntegrityViolationException) {
+            println("some error")
+            throw e
+        }
+
     }
 
     @Transactional
     fun updateBook(bookId: Int, title: String?, authorIdsAdded: List<Int>?, authorIdsRemoved: List<Int>?) {
+        print("updateBook")
         title?.let { bookRepository.updateBookTitle(bookId, it) }
         authorIdsAdded?.forEach { bookRepository.addAuthor(bookId, it) }
         authorIdsRemoved?.forEach { bookRepository.removeAuthor(bookId, it) }

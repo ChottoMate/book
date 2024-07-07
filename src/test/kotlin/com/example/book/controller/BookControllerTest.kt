@@ -1,5 +1,6 @@
 package com.example.book.controller
 
+import com.example.book.model.AuthorInfo
 import com.example.book.model.BookInfo
 import com.example.book.service.BookService
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -29,7 +30,7 @@ class BookControllerTest() {
 
     @Test
     fun getAllBooks_success() {
-        val bookInfos = listOf(BookInfo(1, "book1", listOf("Tanaka", "Suzuki")))
+        val bookInfos = listOf(BookInfo(1, "book1", listOf(AuthorInfo(1, "Tanaka"), AuthorInfo(2, "Suzuki"))))
         val mapper = ObjectMapper()
         val expectedResponse = mapper.writeValueAsString(bookInfos)
         Mockito.`when`(bookService.getAllBooks()).thenReturn(bookInfos)
@@ -43,7 +44,7 @@ class BookControllerTest() {
 
     @Test
     fun getBooksByTitle_success() {
-        val bookInfos = listOf(BookInfo(1, "book1", listOf("Tanaka", "Suzuki")))
+        val bookInfos = listOf(BookInfo(1, "book1", listOf(AuthorInfo(1, "Tanaka"), AuthorInfo(2, "Suzuki"))))
         val mapper = ObjectMapper()
         val expectedResponse = mapper.writeValueAsString(bookInfos)
         Mockito.`when`(bookService.getBooksByTitle("book1")).thenReturn(bookInfos)
@@ -57,7 +58,7 @@ class BookControllerTest() {
 
     @Test
     fun getBooksByAuthorId_success() {
-        val bookInfos = listOf(BookInfo(1, "book1", listOf("Tanaka", "Suzuki")))
+        val bookInfos = listOf(BookInfo(1, "book1", listOf(AuthorInfo(1, "Tanaka"), AuthorInfo(2, "Suzuki"))))
         val mapper = ObjectMapper()
         val expectedResponse = mapper.writeValueAsString(bookInfos)
         Mockito.`when`(bookService.getBooksByAuthor(1)).thenReturn(bookInfos)

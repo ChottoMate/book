@@ -1,5 +1,6 @@
 package com.example.book.repository
 
+import com.example.book.model.AuthorInfo
 import com.example.book.model.BookInfo
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -25,10 +26,10 @@ class BookRepositoryTest {
         val result = bookRepository.findAll()
 
         val expected = listOf(
-                BookInfo(1, "book1", listOf("author1_1", "author1_2", "author1_3")),
-                BookInfo(2, "book2", listOf("author2_1", "author2_2", "author2_3")),
-                BookInfo(3, "book3", listOf("author3_1", "author3_2", "author3_3")),
-                BookInfo(4, "book4", listOf("author2_1"))
+                BookInfo(1, "book1", listOf(AuthorInfo(11, "author1_1"), AuthorInfo(12, "author1_2"), AuthorInfo(13, "author1_3"))),
+                BookInfo(2, "book2", listOf(AuthorInfo(21, "author2_1"), AuthorInfo(22, "author2_2"), AuthorInfo(23, "author2_3"))),
+                BookInfo(3, "book3", listOf(AuthorInfo(31, "author3_1"), AuthorInfo(32, "author3_2"), AuthorInfo(33, "author3_3"))),
+                BookInfo(4, "book4", listOf(AuthorInfo(21, "author2_1")))
         )
         Assertions.assertArrayEquals(expected.toTypedArray(), result.toTypedArray())
     }
@@ -39,7 +40,7 @@ class BookRepositoryTest {
         val result = bookRepository.findByBookTitle("book2")
 
         val expected = listOf(
-                BookInfo(2, "book2", listOf("author2_1", "author2_2", "author2_3")),
+                BookInfo(2, "book2", listOf(AuthorInfo(21, "author2_1"), AuthorInfo(22, "author2_2"), AuthorInfo(23, "author2_3"))),
         )
         Assertions.assertArrayEquals(expected.toTypedArray(), result.toTypedArray())
     }
@@ -50,8 +51,8 @@ class BookRepositoryTest {
         val result = bookRepository.findByAuthor(4)
 
         val expected = listOf(
-                BookInfo(2, "book2", listOf("author2_1", "author2_2", "author2_3")),
-                BookInfo(4, "book4", listOf("author2_1")),
+                BookInfo(2, "book2", listOf(AuthorInfo(21, "author2_1"), AuthorInfo(22, "author2_2"), AuthorInfo(23, "author2_3"))),
+                BookInfo(4, "book4", listOf(AuthorInfo(21, "author2_1"))),
         )
         Assertions.assertArrayEquals(expected.toTypedArray(), result.toTypedArray())
     }
